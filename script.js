@@ -1,88 +1,82 @@
-const elements = [
-  null,
-  { symbol: "H", name: "Hydrogen", electrons: 1 },
-  { symbol: "He", name: "Helium", electrons: 2 },
-  { symbol: "Li", name: "Lithium", electrons: 3 },
-  { symbol: "Be", name: "Beryllium", electrons: 4 },
-  { symbol: "B", name: "Boron", electrons: 5 },
-  { symbol: "C", name: "Carbon", electrons: 6 },
-  { symbol: "N", name: "Nitrogen", electrons: 7 },
-  { symbol: "O", name: "Oxygen", electrons: 8 },
-  { symbol: "F", name: "Fluorine", electrons: 9 },
-  { symbol: "Ne", name: "Neon", electrons: 10 },
-  // Add more elements as needed...
-];
+let angleOffset = 0;
+let animationId = null;
 
-function getElectronConfig(electrons) {
-  const shells = [2, 8, 18, 32, 32, 18, 8]; // Max per shell
-  const config = [];
-  for (let i = 0; i < shells.length; i++) {
-    if (electrons > 0) {
-      const used = Math.min(electrons, shells[i]);
-      config.push(used);
-      electrons -= used;
-    }
-  }
-  return config;
+function getElectronConfig(shells) {
+  return shells;
 }
 
 function drawAtom() {
-  const input = document.getElementById("atomicNumber");
-  const canvas = document.getElementById("atomCanvas");
-  const ctx = canvas.getContext("2d");
-  const info = document.getElementById("elementInfo");
+  const atomicNumber = parseInt(document.getElementById("atomicNumber").value);
+  const element = periodicData.elements.find(e => e.number === atomicNumber);
+  const infoBox = document.getElementById("elementInfo");
 
-  const atomicNumber = parseInt(input.value);
-  if (isNaN(atomicNumber) || atomicNumber < 1 || atomicNumber >= elements.length) {
-    info.textContent = "Please enter a valid atomic number (1-10 for now).";
+  if (!element) {
+    infoBox.textContent = "Invalid atomic number or data not available.";
     return;
   }
 
-  const element = elements[atomicNumber];
-  const config = getElectronConfig(element.electrons);
+  const config = getElectronConfig(element.shells);
+  const canvas = document.getElementById("atomCanvas");
+  const ctx = canvas.getContext("2d");
 
-  // Clear canvas
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  if (animationId) cancelAnimationFrame(animationId);
 
-  const centerX = canvas.width / 2;
-  const centerY = canvas.height / 2;
+  // Display Info
+  infoBox.innerHTML = `
+    <strong>${element.name} (${element.symbol})</strong><br>
+    Atomic Number: ${element.number}<br>
+    Atomic Mass: ${element.atomic_mass}<br>
+    Category: ${element.category}<br>
+    Group: ${element.group || "N/A"}, Period: ${element.period || "N/A"}<br>
+    Electron Configuration: ${element.electron_configuration_semantic}<br>
+    <small>${element.summary || ""}</small>
+  `;
 
-  // Draw nucleus
-  ctx.beginPath();
-  ctx.arc(centerX, centerY, 20, 0, 2 * Math.PI);
-  ctx.fillStyle = "#ff4081";
-  ctx.fill();
+  // Animate
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  ctx.fillStyle = "#fff";
-  ctx.font = "14px Arial";
-  ctx.textAlign = "center";
-  ctx.fillText(element.symbol, centerX, centerY + 4);
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
 
-  // Draw shells and electrons
-  const shellSpacing = 40;
-
-  for (let shellIndex = 0; shellIndex < config.length; shellIndex++) {
-    const radius = shellSpacing * (shellIndex + 1);
-    const electronCount = config[shellIndex];
-
-    // Draw shell
+    // Nucleus
     ctx.beginPath();
-    ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-    ctx.strokeStyle = "#888";
-    ctx.stroke();
+    ctx.arc(centerX, centerY, 25, 0, 2 * Math.PI);
+    ctx.fillStyle = "#ff4081";
+    ctx.fill();
 
-    // Place electrons
-    for (let i = 0; i < electronCount; i++) {
-      const angle = (2 * Math.PI * i) / electronCount;
-      const x = centerX + radius * Math.cos(angle);
-      const y = centerY + radius * Math.sin(angle);
+    ctx.fillStyle = "#fff";
+    ctx.font = "16px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText(element.symbol, centerX, centerY + 5);
 
+    // Shells
+    const shellSpacing = 45;
+    config.forEach((count, shellIndex) => {
+      const radius = shellSpacing * (shellIndex + 1);
+
+      // Orbit
       ctx.beginPath();
-      ctx.arc(x, y, 5, 0, 2 * Math.PI);
-      ctx.fillStyle = "#03a9f4";
-      ctx.fill();
-    }
+      ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+      ctx.strokeStyle = "#555";
+      ctx.stroke();
+
+      // Electrons
+      for (let i = 0; i < count; i++) {
+        const angle = angleOffset + (2 * Math.PI * i) / count;
+        const x = centerX + radius * Math.cos(angle);
+        const y = centerY + radius * Math.sin(angle);
+
+        ctx.beginPath();
+        ctx.arc(x, y, 6, 0, 2 * Math.PI);
+        ctx.fillStyle = "#00f7ff";
+        ctx.fill();
+      }
+    });
+
+    angleOffset += 0.01;
+    animationId = requestAnimationFrame(animate);
   }
 
-  info.textContent = `Element: ${element.name} (${element.symbol}), Atomic Number: ${atomicNumber}`;
-}
+  animate();
+      }
