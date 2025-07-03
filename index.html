@@ -16,6 +16,16 @@
       <button onclick="drawAtom()">Visualize</button>
     </div>
 
+    <!-- Zoom and Speed Controls -->
+    <div class="slider-group">
+      <label>🔍 Zoom:
+        <input type="range" id="zoomSlider" min="0.5" max="2" step="0.1" value="1.2">
+      </label>
+      <label>⚡ Speed:
+        <input type="range" id="speedSlider" min="0.005" max="0.05" step="0.005" value="0.01">
+      </label>
+    </div>
+
     <!-- Element Info -->
     <div id="infoBox" class="glass-box">
       <p id="elementInfo">🔍 Enter an atomic number to view the atom!</p>
