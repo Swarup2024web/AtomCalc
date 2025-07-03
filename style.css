@@ -6,25 +6,31 @@
 }
 
 body {
-  background: linear-gradient(135deg, #0f0f0f, #1c1c1c);
-  color: #ffffff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
+  background: linear-gradient(135deg, #ffe2f1, #d3f8ff);
   min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  color: #333;
 }
 
 .container {
-  text-align: center;
   max-width: 600px;
   width: 100%;
+  text-align: center;
+  padding: 20px;
+  border-radius: 25px;
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.4);
 }
 
 .neon-text {
   font-size: 2rem;
-  color: #00f7ff;
-  text-shadow: 0 0 10px #00f7ff, 0 0 20px #00f7ff;
+  color: #ff69b4;
+  text-shadow: 0 0 5px #ffb3d1, 0 0 15px #ff69b4;
   margin-bottom: 20px;
 }
 
@@ -46,42 +52,42 @@ input, button {
 }
 
 input {
-  flex: 1 1 180px;
-  background: #1f1f1f;
-  color: white;
-  box-shadow: inset 4px 4px 8px #0e0e0e, inset -4px -4px 8px #2e2e2e;
+  background: #f3f3f3;
+  color: #333;
+  box-shadow: inset 5px 5px 10px #ccc, inset -5px -5px 10px #fff;
+  width: 180px;
 }
 
 button {
-  background: rgba(0, 247, 255, 0.15);
-  color: #00f7ff;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 0 10px rgba(0, 247, 255, 0.4);
+  background: linear-gradient(145deg, #ffb3ec, #ffd6f3);
+  color: #7a004b;
+  box-shadow: 0 4px 15px rgba(255, 192, 203, 0.4);
   cursor: pointer;
+  font-weight: bold;
 }
 
 button:hover {
-  background: rgba(0, 247, 255, 0.3);
-  box-shadow: 0 0 15px #00f7ff;
+  background: linear-gradient(145deg, #ffd6f3, #ffb3ec);
+  box-shadow: 0 6px 20px rgba(255, 105, 180, 0.6);
 }
 
 .glass-box {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.4);
   padding: 15px;
   margin-bottom: 20px;
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  text-align: left;
+  border-radius: 15px;
+  backdrop-filter: blur(15px);
+  box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.3);
   font-size: 0.95em;
+  text-align: left;
 }
 
 canvas {
-  max-width: 100%;
   width: 100%;
+  max-width: 100%;
   height: auto;
   border-radius: 50%;
-  background-color: #101010;
-  border: 2px solid #00f7ff;
-}
+  background: radial-gradient(circle at center, #fff5fa, #ffe0f7);
+  box-shadow: 0 4px 20px rgba(255, 182, 193, 0.5);
+  border: 2px solid #ffb6c1;
+  }
