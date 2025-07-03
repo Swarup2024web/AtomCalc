@@ -1,0 +1,33 @@
+body {
+  background: #121212;
+  color: #ffffff;
+  font-family: 'Segoe UI', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.container {
+  text-align: center;
+}
+
+input, button {
+  padding: 10px;
+  margin: 10px;
+  font-size: 1em;
+  border-radius: 8px;
+  border: none;
+}
+
+button {
+  background: #03dac6;
+  color: #000;
+  cursor: pointer;
+}
+
+canvas {
+  margin-top: 20px;
+  background-color: #1f1f1f;
+  border-radius: 50%;
+}
