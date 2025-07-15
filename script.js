@@ -27,36 +27,64 @@ fetch('elementsData.json')
   })
   .catch(() => alert("❌ Failed to load element data. Check path or hosting method."));
 
+// Default neutron guesser
+function defaultNeutrons(Z) {
+  return Z; // Simple estimate: neutrons ≈ atomic number
+}
+
 // Main draw function
 function drawAtom() {
   const Z = parseInt(document.getElementById("atomicNumber").value);
-  const info = document.getElementById("elementInfo");
+  const N_input = document.getElementById("neutronNumber").value;
+  const neutrons = parseInt(N_input) || defaultNeutrons(Z);
+  const mass = Z + neutrons;
+
   const canvas = document.getElementById("atomCanvas");
   const ctx = canvas.getContext("2d");
 
+  const elName = document.getElementById("elName");
+  const elSymbol = document.getElementById("elSymbol");
+  const elNumber = document.getElementById("elNumber");
+  const elNeutrons = document.getElementById("elNeutrons");
+  const elMass = document.getElementById("elMass");
+  const elConfig = document.getElementById("elConfig");
+
+  const orbitList = document.getElementById("orbitList");
+
   if (!periodicData) {
-    info.textContent = "Loading element data...";
+    document.getElementById("elementInfo").textContent = "Loading element data...";
     return;
   }
 
   const element = periodicData.elements.find(e => e.number === Z);
   if (!element) {
-    info.textContent = "Element not found.";
+    document.getElementById("elementInfo").textContent = "Element not found.";
     return;
   }
 
+  // Cancel previous animation
   if (animationId) cancelAnimationFrame(animationId);
 
-  const shells = element.shells || [];
-  info.innerHTML = `
-    <strong>${element.name} (${element.symbol})</strong><br>
-    Atomic No: ${element.number}, Mass: ${element.atomic_mass}<br>
-    Group: ${element.group || '—'}, Period: ${element.period || '—'}<br>
-    Category: ${element.category}<br>
-    Configuration: ${element.electron_configuration_semantic}<br>
-    <small>${element.summary || ''}</small>
-  `;
+  // Update info box
+  elName.textContent = element.name;
+  elSymbol.textContent = element.symbol;
+  elNumber.textContent = Z;
+  elNeutrons.textContent = neutrons;
+  elMass.textContent = mass;
+  elConfig.textContent = element.electron_configuration_semantic;
 
+  // Orbit labels
+  orbitList.innerHTML = "";
+  const shellNames = ["K", "L", "M", "N", "O", "P", "Q"];
+  const shells = element.shells || [];
+
+  shells.forEach((count, i) => {
+    const li = document.createElement("li");
+    li.textContent = `${shellNames[i] || `Shell-${i + 1}`}: ${count} electron${count > 1 ? "s" : ""}`;
+    orbitList.appendChild(li);
+  });
+
+  // Begin animation
   function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     const cx = canvas.width / 2;
@@ -65,22 +93,23 @@ function drawAtom() {
     // Draw nucleus
     ctx.beginPath();
     ctx.arc(cx, cy, 25 * scale, 0, 2 * Math.PI);
-    ctx.fillStyle = "#a0d8ef";
+    ctx.fillStyle = "#ffcccb";
     ctx.fill();
-    ctx.fillStyle = "#333";
+    ctx.fillStyle = "#000";
     ctx.font = `${14 * scale}px Arial`;
     ctx.textAlign = "center";
     ctx.fillText(element.symbol, cx, cy + 5);
 
-    // Draw shells & electrons
+    // Draw orbits and electrons
     const spacing = 45 * scale;
+
     shells.forEach((count, idx) => {
       const r = spacing * (idx + 1);
 
       // Orbit
       ctx.beginPath();
       ctx.arc(cx, cy, r, 0, 2 * Math.PI);
-      ctx.strokeStyle = "#b0bec5";
+      ctx.strokeStyle = "#cfd8dc";
       ctx.stroke();
 
       for (let i = 0; i < count; i++) {
@@ -94,7 +123,7 @@ function drawAtom() {
         ctx.rotate(electronSpinAngle);
         ctx.beginPath();
         ctx.arc(0, 0, 6 * scale, 0, 2 * Math.PI);
-        ctx.fillStyle = "#4fc3f7";
+        ctx.fillStyle = "#00e5ff";
         ctx.fill();
         ctx.restore();
       }
@@ -106,4 +135,4 @@ function drawAtom() {
   }
 
   animate();
-                   }
+          }
