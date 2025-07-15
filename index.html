@@ -3,16 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Bohr Atom Visualizer</title>
+  <title>Atom Visualizer</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container glass-card">
-    <h1 class="neon-text">Bohr Atom Visualizer</h1>
+    <h1 class="neon-text">Atom Visualizer</h1>
 
     <!-- Input Section -->
     <div class="input-box">
       <input type="number" id="atomicNumber" placeholder="Atomic Number (1–118)" min="1" max="118">
+      <input type="number" id="neutronNumber" placeholder="Neutrons (Optional)" min="0" max="300">
       <button onclick="drawAtom()">Visualize</button>
     </div>
 
@@ -26,9 +27,27 @@
       </label>
     </div>
 
-    <!-- Element Info -->
+    <!-- Element Info Table -->
     <div id="infoBox" class="glass-box">
-      <p id="elementInfo">🔍 Enter an atomic number to view the atom!</p>
+      <table id="elementInfoTable">
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Element</td><td id="elName">—</td></tr>
+        <tr><td>Symbol</td><td id="elSymbol">—</td></tr>
+        <tr><td>Atomic Number</td><td id="elNumber">—</td></tr>
+        <tr><td>Neutrons</td><td id="elNeutrons">—</td></tr>
+        <tr><td>Mass Number</td><td id="elMass">—</td></tr>
+        <tr><td>Electron Configuration</td><td id="elConfig">—</td></tr>
+      </table>
+    </div>
+
+    <!-- Orbit Labels -->
+    <div id="orbitInfo" class="glass-box">
+      <h3>Electron Shells</h3>
+      <ul id="orbitList">
+        <!-- Dynamically filled -->
+        <li>K-shell: 2 electrons</li>
+        <li>L-shell: 8 electrons</li>
+      </ul>
     </div>
 
     <!-- Atom Canvas -->
